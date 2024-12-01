@@ -55,8 +55,46 @@ const navigate = useNavigate()
       }
 
       editAction()
-    console.log('Profile updated')
   }
+
+
+  async function cngPass(obj){
+    try {
+
+      const res = await axios.put(`${import.meta.env.VITE_bApi}/user/cngpass`,obj, {
+        headers: {
+  
+          authorization: localStorage.getItem('jwt')
+        }
+       })
+       toast({
+        title: res.data.messege,
+       
+      })
+  
+       
+    } catch (error) {   
+          toast({
+      title: error.response.data.messege,
+     
+    })
+    }
+
+
+  }
+
+function handlePassSubmit (e){
+  e.preventDefault()
+const obj = {
+  currPass:e.target.currPass.value,newPass:e.target.newPass.value
+}
+cngPass(obj)
+  
+
+  }
+
+
+
   return (
     <div className="container mx-auto p-4">
       <div className=" flex justify-end">
@@ -114,20 +152,17 @@ const navigate = useNavigate()
                 <TabsTrigger value="notifications">Notifications</TabsTrigger>
               </TabsList>
               <TabsContent value="password">
-                <form onSubmit={(e) => e.preventDefault()}>
+                <form onSubmit={handlePassSubmit}>
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="current-password">Current Password</Label>
-                      <Input id="current-password" type="password" />
+                      <Input id="current-password" name="currPass" type="password" />
                     </div>
                     <div>
                       <Label htmlFor="new-password">New Password</Label>
-                      <Input id="new-password" type="password" />
+                      <Input id="new-password" name="newPass" type="password" />
                     </div>
-                    <div>
-                      <Label htmlFor="confirm-password">Confirm New Password</Label>
-                      <Input id="confirm-password" type="password" />
-                    </div>
+
                     <Button type="submit">Change Password</Button>
                   </div>
                 </form>
