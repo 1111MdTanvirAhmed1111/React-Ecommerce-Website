@@ -3,12 +3,17 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
-import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useCart } from "@/Contexts/CartContext";
 
 
 
 const ProductCard = ({ image, title, description, price, category, onAddToCart,_id }) => {
+  const { addToCart } = useCart();
+  const handleAddToCart = () => {
+    addToCart({ _id, price, quantity: 1 });
+  };
+
   return (
     <Card className="w-[350px] overflow-hidden m-6 mx-auto ">
           <NavLink to={`/products/${_id}`}>
@@ -34,7 +39,7 @@ const ProductCard = ({ image, title, description, price, category, onAddToCart,_
       </NavLink>
       <CardFooter className="flex justify-between items-center p-4">
         <p className="text-lg font-bold">${price.toFixed(2)}</p>
-        <Button onClick={onAddToCart}>Add to Cart</Button>
+        <Button onClick={handleAddToCart}>Add to Cart</Button>
       </CardFooter>
     </Card>
   )

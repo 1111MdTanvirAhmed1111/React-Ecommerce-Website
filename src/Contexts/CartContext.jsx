@@ -1,36 +1,65 @@
-import {createContext, useContext, useEffect, useState } from "react";
+// context/CartContext.js
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export const CartContext = createContext()
+// Create a CartContext
+const CartContext = createContext();
 
-const url = `${import.meta.env.VITE_bApi}/cart/`
-import  axios from 'axios';
+// Create a CartProvider to manage the cart state
+export const CartProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState([]);
+  const [open,setOpen] = useState(false)
+
+  // Add item to cart
+  const addToCart = (item) => {
+    setCartItems((prevItems) => {
+      const itemExists = prevItems.find((cartItem) => cartItem._id === item._id);
+      if (itemExists) {
+        return prevItems.map((cartItem) =>
+          cartItem._id === item._id
+            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+            : cartItem
+        );
+      }
+      return [...prevItems, item];
+    });
+  };
+
+  // Update item quantity
+  const updateQuantity = (id, quantity) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === id ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  // Remove item from cart
+  const removeItem = (id) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item._id !== id));
+  };
+
+  // Calculate total price
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
 
+  useEffect(()=>{
+console.log(cartItems)
+  },[cartItems])
 
-export const CartProvider = ({children})=>{
-    const [Cart, setCart] = useState([])
-
-    const sCart = async ()=>{
-        const  res = await axios.post(url,Cart,{
-            headers: {
-              Authorization: localStorage.getItem('jwt')
-            }
-           })
-        setCart(res.data.cart)
-    }
-console.log(Cart)
-
-       useEffect(()=>{
-        if(localStorage.getItem('jwt')){
-        sCart()}},[])
-
-    return <CartContext.Provider value={{Cart,setCart}}>
-                    {children}
+  return (
+    <CartContext.Provider
+      value={{ cartItems, addToCart, updateQuantity, removeItem, total,open,setOpen }}
+    >
+      {children}
     </CartContext.Provider>
-}
+  );
+};
 
-
-
-export const useCart = ()=>{
-    return useContext(CartContext)
-}
+// Custom hook to use cart context
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};
