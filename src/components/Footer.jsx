@@ -26,7 +26,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="mt-8 border-t border-gray-200 pt-8 text-center">
-            <p className="text-gray-600">&copy; 2023 NextCommerce. All rights reserved.</p>
+            <p className="text-gray-600">&copy; 2024 {`E-Com BD (Gazi Tanvir Ahmed)`}. All rights reserved.</p>
           </div>
         </div>
       </footer>
