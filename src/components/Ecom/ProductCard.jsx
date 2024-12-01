@@ -5,17 +5,24 @@ import { Badge } from "@/components/ui/badge"
 
 import { NavLink } from 'react-router-dom';
 import { useCart } from "@/Contexts/CartContext";
-
+import { toast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
 
 
 const ProductCard = ({ image, title, description, price, category, onAddToCart,_id }) => {
-  const { addToCart } = useCart();
+  const { addToCart, setOpen } = useCart();
   const handleAddToCart = () => {
     addToCart({ _id, price, quantity: 1 });
+    setOpen(true)
+    toast({
+      description: "Product Successfull Added to Cart"
+    })
   };
 
   return (
     <Card className="w-[350px] overflow-hidden m-6 mx-auto ">
+      
+<Toaster  />
           <NavLink to={`/products/${_id}`}>
       <CardHeader className="p-0">
     

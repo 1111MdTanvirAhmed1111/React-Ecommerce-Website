@@ -183,7 +183,6 @@ const produ = () => {
    description={description}
    price={price}
    category={catagory}
-   onAddToCart={()=>handleAddToCart(_id)}
  />)
             )}
           </div>

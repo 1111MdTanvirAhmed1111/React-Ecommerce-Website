@@ -22,6 +22,7 @@ import {
   } from "@/components/ui/sheet"
 
   import { ScrollArea } from "@/components/ui/scroll-area"
+import { useCart } from '@/Contexts/CartContext';
 const ItemArray = [ 
     
 {
@@ -38,6 +39,7 @@ element: <IoSearch  />
     ]
 
 const Navbar = () => {
+  const {open,setOpen} = useCart()
     return (<div className=' py-2 border-slate-200 border-b-2 '>
         <div className='flex font-monserat justify-between w-[80%] m-auto text-2xl font-bold text-slate-800'>
             
@@ -50,8 +52,8 @@ const Navbar = () => {
             </div>)
             
             }
-            <Sheet className="w-[200px]">
-    <SheetTrigger asChild>
+            <Sheet className="w-[200px]"  open={open} onOpenChange={setOpen}>
+    <SheetTrigger  asChild>
     <IoCartOutline  />
   
     </SheetTrigger>
